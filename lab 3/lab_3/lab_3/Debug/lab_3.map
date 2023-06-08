@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm Wed Jun 07 19:40:32 2023
+AVRASM ver. 2.2.8  C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm Thu Jun 08 16:35:40 2023
 
 
 EQU  SIGNATURE_000 0000001e
@@ -4889,14 +4889,14 @@ EQU  prescalar    00000400
 EQU  sysclk       001e8480
 EQU  reciprocal   00000064
 EQU  offset       00000000
-DEF  global_r20   r21
+DEF  global_r21   r21
 CSEG main         00000200
-CSEG TC_INT       00000258
+CSEG TC_INT       0000025a
 CSEG S2_INT       00000230
 CSEG port_init    0000020b
 CSEG s2_int_init  00000220
 CSEG loop         00000207
 CSEG end          0000020a
-CSEG init_tc_int  00000252
-CSEG init_tc      0000023e
-CSEG enable       00000272
+CSEG init_tc_int  00000254
+CSEG init_tc      00000240
+CSEG enable       00000274

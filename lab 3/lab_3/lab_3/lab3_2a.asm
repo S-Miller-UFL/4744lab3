@@ -23,7 +23,7 @@
 .CSEG
 .org 0x0000
 	rjmp main
-
+;set S2_INT as the ISR
 .CSEG
 .org PORTF_INT0_vect
 	rjmp S2_INT
@@ -46,8 +46,6 @@ main:
 
 end:
 	rjmp end
-	;INPUTS: SWITCHES
-	;OUTPUTS: LEDS
 ;****************************************************
 ; Name:	PORT_INIT
 ; Purpose: TO INITIALIZE INPUT AND OUTPUT PORTS
@@ -85,15 +83,14 @@ RET
 S2_INT_INIT:
 	;save registers
 	push r16
-	;set s2 on slb as interrupt source
-		;sets interrupt level as medium
+	;enable interrupt level 0
 	ldi r16, 0b00000010
 	sts PORTF_INTCTRL,r16
-		;sets s2 slb as interrupt source
+	;sets s2 slb as interrupt source
 	ldi r16, bit3
 	sts PORTF_INT0MASK,r16
-	;set interrupt trigger to rising edge
-	ldi r16, 0b00000001
+	;set interrupt trigger to either edge
+	ldi r16, 0b00000000
 	sts PORTF_PIN3CTRL,r16
 	;set PMIC
 	ldi r16, 0b00000010

@@ -24,14 +24,14 @@
  </OUTPUT_FILES>
  <LABELS>
   <main><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>38</LINE></main>
-  <TC_INT><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>180</LINE></TC_INT>
-  <S2_INT><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>117</LINE></S2_INT>
-  <port_init><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>62</LINE></port_init>
-  <s2_int_init><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>90</LINE></s2_int_init>
+  <TC_INT><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>188</LINE></TC_INT>
+  <S2_INT><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>120</LINE></S2_INT>
+  <port_init><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>63</LINE></port_init>
+  <s2_int_init><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>92</LINE></s2_int_init>
   <loop><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>48</LINE></loop>
   <end><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>52</LINE></end>
-  <init_tc_int><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>166</LINE></init_tc_int>
-  <init_tc><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>139</LINE></init_tc>
-  <enable><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>211</LINE></enable>
+  <init_tc_int><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>173</LINE></init_tc_int>
+  <init_tc><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>145</LINE></init_tc>
+  <enable><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>219</LINE></enable>
  </LABELS>
 </ASSEMBLER_INFO>

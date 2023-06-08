@@ -1,12 +1,12 @@
 
-AVRASM ver. 2.2.8  C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm Wed Jun 07 19:40:32 2023
+AVRASM ver. 2.2.8  C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm Thu Jun 08 16:35:40 2023
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\avrasm\inc\ATxmega128A1Udef.inc'
 C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm(8): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\avrasm\inc\ATxmega128a1udef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\avrasm\inc\ATxmega128A1Udef.inc'
 C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm(8): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\avrasm\inc\ATxmega128a1udef.inc'
                                  
-                                 ;Lab 3, Section 1
+                                 ;Lab 3, Section 2b
                                  
                                  
                                  ;*************************************************************************
@@ -6718,7 +6718,7 @@ C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm(8): Includi
                                  ;Name: Steven Miller
                                  ;Class #: 11318
                                  ;PI Name: Anthony Stross
-                                 ;Description: triggers an overflow interrupt every 84ms
+                                 ;Description: displays binary number in register 21 on the leds
                                  
                                  ;***************INCLUDES*************************************
                                  .include "ATxmega128a1udef.inc"
@@ -6765,17 +6765,17 @@ C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm(17): warnin
                                  ;*******************************END OF EQUATES*******************************
                                  
                                  ;*********************************DEFS********************************
-                                 .def global_r20 = r21
+                                 .def global_r21 = r21
                                  ;*******************************END OF DEFS*******************************
                                  
                                  ;***********MAIN PROGRAM*******************************
                                  .CSEG
                                  .org 0x0000
 000000 c1ff                      	rjmp main
-                                 
+                                 ;set interrupt vectors
                                  .CSEG
                                  .org TCC0_OVF_vect
-00001c c23b                      	rjmp TC_INT
+00001c c23d                      	rjmp TC_INT
                                  .ORG PORTF_INT0_vect
 0000d0 c15f                      	rjmp S2_INT
                                  
@@ -6804,6 +6804,7 @@ C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm(17): warnin
                                  ; Purpose: TO INITIALIZE INPUT AND OUTPUT PORTS
                                  ; Input(s): S2_SLB (PORTF_PIN3)
                                  ; Output: SLB_LEDS (PORTC)
+                                 ; Registers affected: PORTF_DIR,PORTCFG_MPCMASK,PORTC_DIR,PORTC_PIN0CTRL,PORTD_DIR
                                  ;****************************************************
                                  PORT_INIT:
                                  	;save registers
@@ -6832,6 +6833,7 @@ C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm(17): warnin
                                  ; Purpose: TO INITIALIZE S2 INTERRUPTS
                                  ; Input(s): N/A
                                  ; Output: N/A
+                                 ; Registers affected: PORTF_INTCTRL, PORTF_INT0MASK,PMIC_CTRL,PORTF_PIN3CTRL
                                  ;****************************************************
                                  S2_INT_INIT:
                                  	;save registers
@@ -6843,8 +6845,8 @@ C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm(17): warnin
                                  		;sets s2 slb as interrupt source
 000224 e008                      	ldi r16, bit3
 000225 9300 06aa                 	sts PORTF_INT0MASK,r16
-                                 	;set interrupt trigger to rising edge
-000227 e001                      	ldi r16, 0b00000001
+                                 	;set interrupt trigger to either edge
+000227 e000                      	ldi r16, 0b00000000
 000228 9300 06b3                 	sts PORTF_PIN3CTRL,r16
                                  	;set PMIC
 00022a e002                      	ldi r16, 0b00000010
@@ -6859,21 +6861,24 @@ C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm(17): warnin
                                  ; Purpose: THE S2 ISR
                                  ; Input(s): N/A
                                  ; Output: SLB_LEDS (PORTC)
+                                 ; Registers affected: PORTF_INTCTRL
                                  ;****************************************************
                                  S2_INT:
                                  	;save registers from stack
-000230 930f                      	push r16
-000231 9100 003f                 	lds r16, CPU_SREG
-000233 930f                      	push r16
+000230 934f                      	push r20
+000231 9140 003f                 	lds r20, CPU_SREG
+000233 934f                      	push r20
+000234 930f                      	push r16
                                  	;disable io interrupts
-000234 e000                      	ldi r16, 0b00000000
-000235 9300 06a9                 	sts PORTF_INTCTRL,r16
-000237 d01a                      	rcall init_tc_int
-000238 d005                      	rcall init_tc
-000239 910f                      	pop r16
-00023a 9300 003f                 	sts CPU_SREG, r16
-00023c 910f                      	pop r16
-00023d 9518                      RETI
+000235 e000                      	ldi r16, 0b00000000
+000236 9300 06a9                 	sts PORTF_INTCTRL,r16
+000238 d01b                      	rcall init_tc_int
+000239 d006                      	rcall init_tc
+00023a 910f                      	pop r16
+00023b 914f                      	pop r20
+00023c 9340 003f                 	sts CPU_SREG,r20
+00023e 914f                      	pop r20
+00023f 9518                      RETI
                                  
                                  ;****************************************************
                                  ; Name: INIT_TC
@@ -6881,89 +6886,95 @@ C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm(17): warnin
                                  ;		   application.
                                  ; Input(s): N/A
                                  ; Output: N/A
+                                 ; Registers affected: TCC0_CNT,TCC0_PER,TCC0_CTRLA,TCC0_CTRLB
                                  ;****************************************************
                                  INIT_TC:
-00023e 930f                      push r16
+000240 930f                      push r16
                                  ;initialize count register
-00023f e000                      ldi r16,0
-000240 9300 0820                 sts TCC0_CNT, r16
-000242 9300 0821                 sts TCC0_CNT+1,r16
+000241 e000                      ldi r16,0
+000242 9300 0820                 sts TCC0_CNT, r16
+000244 9300 0821                 sts TCC0_CNT+1,r16
                                  
                                  ;initialize period register
-000244 e103                      ldi r16,low(((sysclk/prescalar)/reciprocal)+offset)
-000245 9300 0826                 sts TCC0_PER, r16
-000247 e000                      ldi r16,high(((sysclk/prescalar)/reciprocal)+offset)
-000248 9300 0827                 sts TCC0_PER+1,r16
+000246 e103                      ldi r16,low(((sysclk/prescalar)/reciprocal)+offset)
+000247 9300 0826                 sts TCC0_PER, r16
+000249 e000                      ldi r16,high(((sysclk/prescalar)/reciprocal)+offset)
+00024a 9300 0827                 sts TCC0_PER+1,r16
                                  
                                  ;initialize clksel
-00024a e007                      ldi r16, TC_CLKSEL_DIV1024_gc
-00024b 9300 0800                 sts TCC0_CTRLA,r16
-00024d e000                      ldi r16, input
-00024e 9300 0801                 sts TCC0_CTRLB,r16
-000250 910f                      pop r16
+00024c e007                      ldi r16, TC_CLKSEL_DIV1024_gc
+00024d 9300 0800                 sts TCC0_CTRLA,r16
+00024f e000                      ldi r16, input
+000250 9300 0801                 sts TCC0_CTRLB,r16
+000252 910f                      pop r16
                                  
-000251 9508                      ret
+000253 9508                      ret
                                  ;****************************************************
                                  ; Name: INIT_TC_INT
                                  ; Purpose: To initialize the OVF interrupt
                                  ; Input(s): N/A
                                  ; Output: N/A
+                                 ; Registers affected: TCC0_CTRLA
                                  ;****************************************************
                                  INIT_TC_INT:
                                  ;store registers
-000252 930f                      push r16
+000254 930f                      push r16
                                  ;enable tcc0 ovf interrupts, set priority to medium
-000253 e002                      ldi r16, 0b00000010
-000254 9300 0806                 sts TCC0_INTCTRLA,r16
-000256 910f                      pop r16
-000257 9508                      ret
+000255 e002                      ldi r16, 0b00000010
+000256 9300 0806                 sts TCC0_INTCTRLA,r16
+000258 910f                      pop r16
+000259 9508                      ret
                                  ;****************************************************
                                  ; Name: TC_INT 
                                  ; Purpose: The TC interrupt service routine
                                  ; Input(s): TCC0_INTFLAGS, CPU_SREG
                                  ; Output: PORTC_OUTTGL
+                                 ; Registers affected: TCC0_CNT,TCC0_PER,TCC0_CTRLA,TCC0_CTRLB,TCC0_INTCTRLA
                                  ;****************************************************
                                  TC_INT:
                                  ;push cpu sreg to stack
-000258 934f                      push r20
-000259 9140 003f                 lds r20,CPU_SREG
-00025b 934f                      push r20
+00025a 934f                      push r20
+00025b 9140 003f                 lds r20,CPU_SREG
+00025d 934f                      push r20
                                  ;push registers to stack
-00025c 930f                      push r16
+00025e 930f                      push r16
                                  ;disable TC
-00025d e000                      ldi r16, 0b00000000
-00025e 9300 0800                 sts TCC0_CTRLA, r16
+00025f e000                      ldi r16, 0b00000000
+000260 9300 0800                 sts TCC0_CTRLA, r16
                                  ;disable tc interrupt
-000260 e000                      ldi r16, 0b00000000
-000261 9300 0806                 sts TCC0_INTCTRLA,r16
+000262 e000                      ldi r16, 0b00000000
+000263 9300 0806                 sts TCC0_INTCTRLA,r16
                                  ;reset period and counter
-000263 9300 0826                 sts TCC0_PER, r16
-000265 9300 0827                 sts TCC0_PER+1, r16
-000267 9300 0820                 sts TCC0_CNT,r16
-000269 9300 0821                 sts TCC0_CNT+1,r16
+000265 9300 0826                 sts TCC0_PER, r16
+000267 9300 0827                 sts TCC0_PER+1, r16
+000269 9300 0820                 sts TCC0_CNT,r16
+00026b 9300 0821                 sts TCC0_CNT+1,r16
                                  
                                  ;get s2 slb switch status
-00026b 9100 06a8                 lds r16, PORTF_IN
+00026d 9100 06a8                 lds r16, PORTF_IN
                                  
                                  ;increment if on
-00026d fd03                      sbrc r16,3
-00026e c003                      rjmp enable
+00026f fd03                      sbrc r16,3
+000270 c003                      rjmp enable
                                  ;increment global count register
-00026f 9553                      inc global_r20
+000271 9553                      inc global_r21
                                  ;display count on leds
-000270 9350 0644                 sts PORTC_OUT,global_r20
+000272 9350 0644                 sts PORTC_OUT,global_r21
                                  
                                  ;enable io interrupt
                                  enable:
-000272 e002                      ldi r16, 0b00000010
-000273 9300 06a9                 sts PORTF_INTCTRL,r16
+000274 e002                      ldi r16, 0b00000010
+000275 9300 06a9                 sts PORTF_INTCTRL,r16
+000277 e001                      ldi r16, 0B00000001
+000278 9300 06ac                 sts PORTF_INTFLAGS,r16
                                  
                                  ;pop registers and sreg from stack
-000275 910f                      pop r16
-000276 914f                      pop r20
-000277 9340 003f                 sts CPU_SREG, r20
-000279 914f                      pop r20
-00027a 9518                      reti
+00027a 910f                      pop r16
+00027b 914f                      pop r20
+00027c 9340 003f                 sts CPU_SREG, r20
+00027e 914f                      pop r20
+00027f 9518                      reti
+                                 
 
 
 RESOURCE USE INFORMATION
@@ -6983,7 +6994,7 @@ counted separately from r26..r31 here.
 "ATxmega128A1U" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  69 r17:   0 r18:   0 r19:   0 r20:   6 
+r13:   0 r14:   0 r15:   0 r16:  67 r17:   0 r18:   0 r19:   0 r20:  12 
 r21:   2 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
 Registers used: 3 out of 35 (8.6%)
@@ -7000,22 +7011,22 @@ clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0
 cpi   :   0 cpse  :   0 dec   :   0 des   :   0 eicall:   0 eijmp :   0 
 elpm  :   0 eor   :   0 fmul  :   0 fmuls :   0 fmulsu:   0 icall :   0 
 ijmp  :   0 in    :   0 inc   :   1 jmp   :   0 lac   :   0 las   :   0 
-lat   :   0 ld    :   0 ldd   :   0 ldi   :  23 lds   :   3 lpm   :   0 
+lat   :   0 ld    :   0 ldd   :   0 ldi   :  24 lds   :   3 lpm   :   0 
 lsl   :   0 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 
 mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   2 
-pop   :   9 push  :   9 rcall :   4 ret   :   4 reti  :   2 rjmp  :   6 
+pop   :  10 push  :  10 rcall :   4 ret   :   4 reti  :   2 rjmp  :   6 
 rol   :   0 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 
 sbis  :   0 sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   0 sec   :   0 
 seh   :   0 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 
 sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 
-sts   :  29 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
+sts   :  30 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
 xch   :   0 
 Instructions used: 13 out of 121 (10.7%)
 
 "ATxmega128A1U" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0004f6    252      0    252  139264   0.2%
+[.cseg] 0x000000 0x000500    262      0    262  139264   0.2%
 [.dseg] 0x002000 0x002000      0      0      0    8192   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    2048   0.0%
 

@@ -1,8 +1,8 @@
-;Lab 3, Section 1
+;Lab 3, Section 2b
 ;Name: Steven Miller
 ;Class #: 11318
 ;PI Name: Anthony Stross
-;Description: triggers an overflow interrupt every 84ms
+;Description: displays binary number in register 21 on the leds
 
 ;***************INCLUDES*************************************
 .include "ATxmega128a1udef.inc"
@@ -19,14 +19,14 @@
 ;*******************************END OF EQUATES*******************************
 
 ;*********************************DEFS********************************
-.def global_r20 = r21
+.def global_r21 = r21
 ;*******************************END OF DEFS*******************************
 
 ;***********MAIN PROGRAM*******************************
 .CSEG
 .org 0x0000
 	rjmp main
-
+;set interrupt vectors
 .CSEG
 .org TCC0_OVF_vect
 	rjmp TC_INT
@@ -58,6 +58,7 @@ end:
 ; Purpose: TO INITIALIZE INPUT AND OUTPUT PORTS
 ; Input(s): S2_SLB (PORTF_PIN3)
 ; Output: SLB_LEDS (PORTC)
+; Registers affected: PORTF_DIR,PORTCFG_MPCMASK,PORTC_DIR,PORTC_PIN0CTRL,PORTD_DIR
 ;****************************************************
 PORT_INIT:
 	;save registers
@@ -86,6 +87,7 @@ RET
 ; Purpose: TO INITIALIZE S2 INTERRUPTS
 ; Input(s): N/A
 ; Output: N/A
+; Registers affected: PORTF_INTCTRL, PORTF_INT0MASK,PMIC_CTRL,PORTF_PIN3CTRL
 ;****************************************************
 S2_INT_INIT:
 	;save registers
@@ -97,8 +99,8 @@ S2_INT_INIT:
 		;sets s2 slb as interrupt source
 	ldi r16, bit3
 	sts PORTF_INT0MASK,r16
-	;set interrupt trigger to rising edge
-	ldi r16, 0b00000001
+	;set interrupt trigger to either edge
+	ldi r16, 0b00000000
 	sts PORTF_PIN3CTRL,r16
 	;set PMIC
 	ldi r16, 0b00000010
@@ -113,11 +115,13 @@ RET
 ; Purpose: THE S2 ISR
 ; Input(s): N/A
 ; Output: SLB_LEDS (PORTC)
+; Registers affected: PORTF_INTCTRL
 ;****************************************************
 S2_INT:
 	;save registers from stack
-	push r16
-	lds r16, CPU_SREG
+	push r20
+	lds r20, CPU_SREG
+	push r20
 	push r16
 	;disable io interrupts
 	ldi r16, 0b00000000
@@ -125,8 +129,9 @@ S2_INT:
 	rcall init_tc_int
 	rcall init_tc
 	pop r16
-	sts CPU_SREG, r16
-	pop r16
+	pop r20
+	sts CPU_SREG,r20
+	pop r20
 RETI
 
 ;****************************************************
@@ -135,6 +140,7 @@ RETI
 ;		   application.
 ; Input(s): N/A
 ; Output: N/A
+; Registers affected: TCC0_CNT,TCC0_PER,TCC0_CTRLA,TCC0_CTRLB
 ;****************************************************
 INIT_TC:
 push r16
@@ -162,6 +168,7 @@ ret
 ; Purpose: To initialize the OVF interrupt
 ; Input(s): N/A
 ; Output: N/A
+; Registers affected: TCC0_CTRLA
 ;****************************************************
 INIT_TC_INT:
 ;store registers
@@ -176,6 +183,7 @@ ret
 ; Purpose: The TC interrupt service routine
 ; Input(s): TCC0_INTFLAGS, CPU_SREG
 ; Output: PORTC_OUTTGL
+; Registers affected: TCC0_CNT,TCC0_PER,TCC0_CTRLA,TCC0_CTRLB,TCC0_INTCTRLA
 ;****************************************************
 TC_INT:
 ;push cpu sreg to stack
@@ -203,14 +211,16 @@ lds r16, PORTF_IN
 sbrc r16,3
 rjmp enable
 ;increment global count register
-inc global_r20
+inc global_r21
 ;display count on leds
-sts PORTC_OUT,global_r20
+sts PORTC_OUT,global_r21
 
 ;enable io interrupt
 enable:
 ldi r16, 0b00000010
 sts PORTF_INTCTRL,r16
+ldi r16, 0B00000001
+sts PORTF_INTFLAGS,r16
 
 ;pop registers and sreg from stack
 pop r16
@@ -218,3 +228,4 @@ pop r20
 sts CPU_SREG, r20
 pop r20
 reti
+
