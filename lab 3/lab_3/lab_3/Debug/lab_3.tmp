@@ -1,0 +1,37 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATxmega128A1U"</DEVICE>
+ <WORKING_DIR>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\avrasm\inc\ATxmega128A1Udef.inc</FILE>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\avrasm\inc\ATxmega128a1udef.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\Debug\lab_3.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>lab_3.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>lab_3.map</FILE>
+  <FILE>lab_3.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <main><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>38</LINE></main>
+  <TC_INT><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>180</LINE></TC_INT>
+  <S2_INT><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>117</LINE></S2_INT>
+  <port_init><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>62</LINE></port_init>
+  <s2_int_init><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>90</LINE></s2_int_init>
+  <loop><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>48</LINE></loop>
+  <end><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>52</LINE></end>
+  <init_tc_int><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>166</LINE></init_tc_int>
+  <init_tc><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>139</LINE></init_tc>
+  <enable><FILE>C:\Users\steve\git repos\eel4744\lab 3\lab 3\lab_3\lab_3\lab3_2b.asm</FILE><LINE>211</LINE></enable>
+ </LABELS>
+</ASSEMBLER_INFO>
